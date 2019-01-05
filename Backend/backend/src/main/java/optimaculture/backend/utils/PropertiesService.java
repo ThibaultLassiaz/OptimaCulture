@@ -9,10 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-
-import optimaculture.backend.services.MqttImportService;
-
 public class PropertiesService {
 	
 	private static Properties prop;
@@ -53,7 +49,7 @@ public class PropertiesService {
 	}
 	
 	public static String getProperty(String propName) {
-		//TODO : faire le vrai raitement
+		//TODO : faire le vrai traitement
 		//return prop.getProperty(propName);
 		return "localhost";
 	}

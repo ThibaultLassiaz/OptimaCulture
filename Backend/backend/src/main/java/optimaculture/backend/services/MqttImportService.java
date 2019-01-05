@@ -12,6 +12,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import optimaculture.backend.models.DataModel;
+import optimaculture.backend.utils.Jsoniser;
+import optimaculture.backend.utils.WriterService;
+
 /**
  * 
  * Service de contact au broker mqtt
@@ -30,6 +34,7 @@ public class MqttImportService {
 	private String topic;
 	
 	private MqttImportService() {
+		//TODO utiliser le service de properties quand il marche
 		broker = "tcp://localhost:1883";
 		topic = "test";
 		
@@ -80,8 +85,16 @@ public class MqttImportService {
 		      public void connectionLost(Throwable cause) {}
 
 		      public void messageArrived(String topic, MqttMessage message) throws Exception {
-		    	  //TODO : stocker ces données
-		    	  System.out.println("Message: " + message.toString());
+		    	  logger.info("Message collecté : " + message.toString());
+		    	  
+		    	  //Créer un object java stockant la donnée
+		    	  DataModel data = new DataModel(message.toString());
+
+		    	  //Transforme l'ojet en json
+		    	  String json = Jsoniser.jsonise(data);
+
+		    	  //Enregistre le json dans un fichier
+		    	  WriterService.writeData(json);
 		      }
 		      public void deliveryComplete(IMqttDeliveryToken token) {}
 	    });
