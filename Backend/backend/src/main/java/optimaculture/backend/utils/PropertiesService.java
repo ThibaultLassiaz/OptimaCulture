@@ -16,7 +16,7 @@ public class PropertiesService {
 
 	private static PropertiesService instance = null;
 	
-	private static Logger logger = Logger.getLogger(MqttImportService.class);
+	private static Logger logger = Logger.getLogger(PropertiesService.class);
 	
 	private PropertiesService() {
 		prop = new Properties();

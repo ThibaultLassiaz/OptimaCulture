@@ -16,6 +16,7 @@ public class WriterService {
 		File temp = File.createTempFile( PropertiesService.getInstance().getProperty("outputFileName"), ".json");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
 		bw.write(PropertiesService.getInstance().getProperty("jsonHeader"));
+		bw.write(String.format("%n"));
 		bw.write(json);
 		bw.write(String.format("%n"));
         bw.close();
