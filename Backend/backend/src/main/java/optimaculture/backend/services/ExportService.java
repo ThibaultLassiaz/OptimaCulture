@@ -25,7 +25,7 @@ public class ExportService extends TimerTask {
 	@Override
 	public void run() {
 		List<File> fileList = getFiles();
-		if(fileList.size() > 0) {
+		if(fileList!= null && fileList.size() > 0) {
 		pushToElastic(fileList);
 			//TODO activer ça quand le code de push marche
 			//removeFiles(fileList);
@@ -42,7 +42,6 @@ public class ExportService extends TimerTask {
 		
 		for (final File fileEntry : tempFiledirectory.listFiles()) {
 	        if (!fileEntry.isDirectory() && fileEntry.getName().startsWith(PropertiesService.getInstance().getProperty("outputFileName"))) {
-	            System.out.println(fileEntry.getName());
 	            fileList.add(fileEntry);
 	        }
 	    }
