@@ -14,6 +14,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import optimaculture.backend.models.DataModel;
 import optimaculture.backend.utils.Jsoniser;
+import optimaculture.backend.utils.PropertiesService;
 import optimaculture.backend.utils.WriterService;
 
 /**
@@ -34,9 +35,9 @@ public class MqttImportService {
 	private String topic;
 	
 	private MqttImportService() {
-		//TODO utiliser le service de properties quand il marche
-		broker = "tcp://localhost:1883";
-		topic = "test";
+
+		broker = PropertiesService.getInstance().getProperty("serverUrl");
+		topic = PropertiesService.getInstance().getProperty("topic");
 		
 		instatiateService();
 		try {

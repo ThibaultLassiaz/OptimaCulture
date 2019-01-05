@@ -8,11 +8,7 @@ import java.io.IOException;
 public class WriterService {
 
 	public static void writeData(String json) throws IOException {
-		File temp;
-		//TODO : utiliser les properties
-		temp = File.createTempFile("optimaculture", ".json");
-		 
-        //write data on temporary file
+		File temp = File.createTempFile( PropertiesService.getInstance().getProperty("outputFileName"), ".json");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
 		bw.write(json);
         bw.close();
