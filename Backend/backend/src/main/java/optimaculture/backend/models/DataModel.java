@@ -2,6 +2,11 @@ package optimaculture.backend.models;
 
 import java.util.Date;
 
+/**
+ * 
+ * Modèle des données reçues depuis le broker mqtt
+ *
+ */
 public class DataModel {
 	
 	private String id;

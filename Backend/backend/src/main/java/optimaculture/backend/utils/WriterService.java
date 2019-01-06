@@ -8,7 +8,8 @@ import java.io.IOException;
 public class WriterService {
 
 	/**
-	 * ecrit dans un fichier temporaire les données json avec une entête et un saut de ligne indispensables pour elatic
+	 * Ecrit dans un fichier temporaire les données json
+	 * Une entête et un saut de ligne indispensables pour elatic
 	 * @param json
 	 * @throws IOException
 	 */

@@ -10,6 +10,11 @@ import org.apache.log4j.Logger;
 
 import optimaculture.backend.utils.PropertiesService;
 
+/**
+ * 
+ * Service d'export des données vers Elastic
+ *
+ */
 public class ExportService extends TimerTask {
 	
 	private static Logger logger = Logger.getLogger(ExportService.class);
@@ -32,8 +37,12 @@ public class ExportService extends TimerTask {
 		List<File> fileList = getFiles();
 		if(fileList!= null && fileList.size() > 0) {
 			pushToElastic(fileList);
-			//TODO activer ça quand le code de push marche
-			//removeFiles(fileList);
+			try {
+				Thread.sleep((long)1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			removeFiles(fileList);
 		}
 	}
 	
@@ -53,15 +62,18 @@ public class ExportService extends TimerTask {
 		return fileList;
 	}	
 	
+	/**
+	 * Lance une commande cURL pour pousser les fichiers 
+	 * @param fileList
+	 */
 	private void pushToElastic(List<File> fileList) {
 		for (final File fileEntry : fileList) {
 			String[] curlCommand = buildCurlCommand(fileEntry);
 			
 			ProcessBuilder processBuilder = new ProcessBuilder(curlCommand); 
-	        Process process;
 	        try
 	        {
-	        	process = processBuilder.start();
+	        	processBuilder.start();
 	        }
 	        catch (IOException e)
 	        {   
@@ -79,12 +91,17 @@ public class ExportService extends TimerTask {
 	    }
 	}
 	
+	/**
+	 * 
+	 * @param fileEntry
+	 * @return la commande cURL permettant de pousser les fichiers vers ELastic
+	 */
 	private String[] buildCurlCommand(File fileEntry) {
 		
-		String username="miage";
-	    String password="miage38";
+		String username=PropertiesService.getInstance().getProperty("elasticUserName");
+	    String password=PropertiesService.getInstance().getProperty("elasticPassword");
 	    String file=fileEntry.getPath().replaceAll("\\\\", "/");
-	    String server = "0a2e0b8e495b47fc86fd12a223aeaf84.eu-central-1.aws.cloud.es.io:9243";
+	    String server = PropertiesService.getInstance().getProperty("elasticServer");
 	    String[] command = {"curl","-XPUT" ,"https://"+username+":"+password+"@"+server+"/_bulk","-H","\"Content-Type: application/json\"","--data-binary","@"+file};
 	    
 	    return command;

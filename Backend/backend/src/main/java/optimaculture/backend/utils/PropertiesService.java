@@ -1,15 +1,17 @@
 package optimaculture.backend.utils;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import optimaculture.backend.services.MqttImportService;
-
+/**
+ * 
+ * Service d'accès aux propriétés java
+ *
+ */
 public class PropertiesService {
 	
 	private static Properties prop;
@@ -35,15 +37,9 @@ public class PropertiesService {
 		return instance;
 	}
 	
-	private void instantiatePropertyFiles() throws IOException {
-		String propFileName = "config.properties";
-		
+	private void instantiatePropertyFiles() throws IOException {		
 		InputStream inputStream = new FileInputStream("config.properties");
-		if (inputStream != null) {
-			prop.load(inputStream);
-		} else {
-			throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-		}
+		prop.load(inputStream);
 	}
 	
 	public String getProperty(String propName) {
