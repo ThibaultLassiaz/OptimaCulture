@@ -1,20 +1,20 @@
 OptimaCulture
 =====================
 
-#Stack utilisé
+# Stack utilisé
 
-##Backend
+## Backend
 
-###Java
+### Java
 
 Using MQTT and cURL
 
-##Frontend
+## Frontend
 
-###ElasticSearch
+### ElasticSearch
 
 Using Elastic Cloud
 
-###Kibana
+### Kibana
 
 Using Elastic Cloud
