@@ -2,6 +2,8 @@ package optimaculture.backend.models;
 
 import java.util.Date;
 
+import optimaculture.backend.utils.PropertiesService;
+
 /**
  * 
  * Modèle des données reçues depuis le broker mqtt
@@ -46,14 +48,28 @@ public class DataModel {
 		this.value = value;
 	}
 
-	public DataModel(String data) {
+	public DataModel(String data) throws Exception {
 		super();
-		//TODO utiliser les properties quand le service marche :)
-		String[] dataTab = data.split(";");
-		
-		this.id = dataTab[0];
-		this.type = dataTab[1];
-		this.date = new Date();
-		this.value = dataTab[2];
+		String[] dataTab = data.split(PropertiesService.getInstance().getProperty("dataSeparator"));
+		if(dataTab.length == 3) {
+			this.id = dataTab[0];
+			this.type = dataTab[1].toUpperCase();
+			if(!isValidType(type)) {
+				throw new Exception("Type de données invalide : "+type);
+			}
+			this.date = new Date();
+			this.value = dataTab[2];
+		}else {
+			throw new Exception("Données manquantes");
+		}
+	}
+	
+	private boolean isValidType(String type) {
+		for(SensorType sensorType : SensorType.values()) {
+			if(sensorType.name().equals(type)) {
+				return true;
+			}
+		}		
+		return false;
 	}
 }

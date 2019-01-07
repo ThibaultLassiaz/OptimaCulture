@@ -40,15 +40,8 @@ public class MqttImportService {
 		topic = PropertiesService.getInstance().getProperty("topic");
 		
 		instatiateService();
-		try {
-			dataTreatment();
-		} catch (MqttSecurityException e) {
-			logger.warn("Une erreur de sécurité c'est produite : ");
-			e.printStackTrace();
-		} catch (MqttException e) {
-			logger.warn("Une erreur c'est produite lors de l'accès au serveur Mqtt : ");
-			e.printStackTrace();
-		}
+		dataTreatment();
+		
 	}
 	
 	public static MqttImportService getInstance() {
@@ -78,7 +71,7 @@ public class MqttImportService {
 	 * @throws MqttSecurityException
 	 * @throws MqttException
 	 */
-	private void dataTreatment() throws MqttSecurityException, MqttException {
+	private void dataTreatment() {
 	    MqttConnectOptions connOpts = new MqttConnectOptions();
 	    connOpts.setCleanSession(true);
 	    
@@ -86,20 +79,37 @@ public class MqttImportService {
 		      public void connectionLost(Throwable cause) {}
 
 		      public void messageArrived(String topic, MqttMessage message) throws Exception {
-		    	  logger.info("Message collecté : " + message.toString());
+		    	  try {
+			    	  //Créer un object java stockant la donnée
+		    		  DataModel data = new DataModel(message.toString());
 		    	  
-		    	  //Créer un object java stockant la donnée
-		    	  DataModel data = new DataModel(message.toString());
-
-		    	  //Transforme l'ojet en json
-		    	  String json = Jsoniser.jsonise(data);
-
-		    	  //Enregistre le json dans un fichier
-		    	  WriterService.writeData(json);
+			    	  //Transforme l'ojet en json
+			    	  String json = Jsoniser.jsonise(data);
+	
+			    	  //Enregistre le json dans un fichier
+			    	  WriterService.writeData(json);
+			    	  
+			    	  logger.info("Message collecté : " + message.toString());
+			    	  
+		    	  }catch(Exception e) {
+		    		  logger.warn(e);
+		    	  }		    	  
 		      }
+		      
 		      public void deliveryComplete(IMqttDeliveryToken token) {}
 	    });
-		
+		try {
+			connection(connOpts);
+		} catch (MqttSecurityException e) {
+			logger.warn("Une erreur de sécurité c'est produite : ");
+			e.printStackTrace();
+		} catch (MqttException e) {
+			logger.warn("Une erreur c'est produite lors de l'accès au serveur Mqtt : ");
+			e.printStackTrace();
+		}	
+	}
+	
+	private void connection(MqttConnectOptions connOpts) throws MqttException {
 		try {
 			logger.info("Connection au broker: " + broker);
 			client.connect(connOpts);
