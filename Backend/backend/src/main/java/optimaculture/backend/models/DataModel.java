@@ -1,5 +1,8 @@
 package optimaculture.backend.models;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import optimaculture.backend.utils.PropertiesService;
@@ -13,7 +16,7 @@ public class DataModel {
 	
 	private String id;
 	private String type;
-	private Date date;
+	private String date;
 	private String value;
 	
 	public String getId() {
@@ -32,20 +35,19 @@ public class DataModel {
 		this.type = type;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	public String getValue() {
 		return value;
 	}
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public DataModel(String data) throws Exception {
@@ -57,7 +59,11 @@ public class DataModel {
 			if(!isValidType(type)) {
 				throw new Exception("Type de données invalide : "+type);
 			}
-			this.date = new Date();
+			
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Date today = Calendar.getInstance().getTime();        
+			this.date = df.format(today);
+			
 			this.value = dataTab[2];
 		}else {
 			throw new Exception("Données manquantes");

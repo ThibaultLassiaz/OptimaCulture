@@ -87,7 +87,7 @@ public class MqttImportService {
 			    	  String json = Jsoniser.jsonise(data);
 	
 			    	  //Enregistre le json dans un fichier
-			    	  WriterService.writeData(json);
+			    	  WriterService.writeData(json,data.getType());
 			    	  
 			    	  logger.info("Message collecté : " + message.toString());
 			    	  
